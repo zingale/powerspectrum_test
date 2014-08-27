@@ -106,7 +106,7 @@ ncount = np.bincount(whichbin)
 
 E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 
-for n in range(ncount):
+for n in range(len(ncount)):
     if not ncount[n] == 0: 
         E_spectrum[n-1] = np.sum(phi_hat.flat[whichbin==n]) #/ncount[n]
 
