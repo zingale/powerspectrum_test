@@ -66,7 +66,7 @@ for m in range(1,modes+1):
 
 
 # now do the power spectrum
-phi_hat = np.fft.fftn(phi) #[0:N/2+1,0:N/2+1,0:N/2+1]
+phi_hat = np.fft.fftn(phi)[0:N/2+1,0:N/2+1,0:N/2+1]
 #phi_hat = 8.0*phi_hat/N**3
 phi_hat = phi_hat/N**3
 
