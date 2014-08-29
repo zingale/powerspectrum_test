@@ -45,7 +45,10 @@ for m in range(1,modes+1):
 
 # amplitude of smallest k
 print "min{k_x} = ", 1/L[0]
-print "amplitude of smallest k = ", A_0*np.sqrt(1/L[0]**2 + 1/L[1]**2 + 1/L[2]**2)**index/weights[3]
+
+A_ksmall = A_0*np.sqrt(1/L[0]**2 + 1/L[1]**2 + 1/L[2]**2)**index/weights[3]
+print "amplitude of smallest k = ", A_ksmall
+print "power at smallest k =     ", A_ksmall**2
 
 
 # compute the function we will find the power spectrum of
@@ -189,9 +192,14 @@ ncount = np.bincount(whichbin)
 
 E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 
+
+# unresolved:  should I normalize by ncount[n]?  Interestingly, plotting
+# the spectrum of sum(|phi_hat(n)|)/ncount(n) gives the best slope.
+
 for n in range(len(ncount)):
     if not ncount[n] == 0: 
-        E_spectrum[n-1] = np.sum(np.abs(phi_hat).flat[whichbin==n]) #/ncount[n]
+        #E_spectrum[n-1] = np.sum((np.abs(phi_hat)).flat[whichbin==n]) /ncount[n]
+        E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n]) #/ncount[n]
 
 
 #---------------------------------------------------------------------------
