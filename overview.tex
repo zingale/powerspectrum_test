@@ -1,0 +1,65 @@
+\documentclass[11pt]{article}
+
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{mathpazo}
+
+\newcommand{\numpy}{{\sf NumPy}}
+
+\begin{document}
+
+\begin{center}
+{\bf \Large Making Sense of Power Spectra}
+\end{center}
+
+We are interested in computing the numerical power spectrum of a
+function with a known analytic power spectrum, to verify our
+algorithm.
+
+Consider a function that is a superposition of sines with different
+wavelengths.  The power will be encoded in the amplitude of the sines.
+Now imagine this function discretely sampled at $N$ points.  For a domain of
+length $L$ the highest possible wavenumber is:
+\begin{equation}
+k_\mathrm{max} = \frac{1}{\Delta x}
+\end{equation}
+with $\Delta x = L/N$.  However, for real-valued data, Nyquist sampling
+means that $k_\mathrm{max}/2$ is the meaningful maximum.
+The lowest wavenumber is:
+\begin{equation}
+k_\mathrm{min} = \frac{1}{L}
+\end{equation}
+
+
+\section*{\numpy\ details}
+
+The {\tt rfftfreq} function returns the wavenumbers as
+\begin{equation}
+k = \left \{ 0, \frac{1}{N}, \frac{2}{N}, \ldots, \frac{N-2}{2N}, \frac{1}{2} \right \}
+\end{equation}
+(for even $n$, and in the mode where we do not specify the sample spacing).
+We convert these into a physical quantity (with units of cm$^{-1}$) by
+multiplying by $1/\Delta x$, giving the set:
+\begin{equation}
+k = \left \{ 0, \frac{1}{L}, \frac{2}{L}, \ldots, \frac{1}{2\Delta x} \right \}
+\end{equation}
+
+\numpy\ does not have a real-valued FFT function for 3-d data, so we
+need to use the {\tt fftn} function.  Because $N$ real numbers results
+in $2N$ complex numbers, only 1/2 of the transformed data (in each
+dimension) will be unique.  In 3-d this means we consider only an
+octant of data.  In practice, this means keeping the positive
+frequencies and dropping the negative ones (this is what the {\tt
+  rfftfreq} function does for us).
+
+
+Parseval's theorem in 1-d says that
+\begin{equation}
+\sum_{n=0}^{N-1} | f(n) |^2 = \frac{1}{N} \sum_{k=0}^{N-1} | \mathcal{F}(k) |^2
+\end{equation}
+In 3-d, if we have $N^3$ points, then the normalization is $1/N^3$.
+
+
+
+\end{document}
