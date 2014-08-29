@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 
+# number of discrete points in real space to sample
 N = 64
 
 index = -2.0
@@ -22,7 +23,7 @@ z = (np.arange(N)+0.5)*(zmax - zmin)/N + zmin
 
 x3d, y3d, z3d = np.meshgrid(x, y, z, indexing="ij")
 
-modes = 8
+modes = 16
 
 A_0 = 1000.0
 
@@ -68,8 +69,9 @@ for m in range(1,modes+1):
                             2.0*np.pi*k_z*z3d)
 
 
-# plot it
-
+#---------------------------------------------------------------------------
+# plot the real-space function
+#---------------------------------------------------------------------------
 F = plt.figure()
 
 grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85), 
@@ -95,14 +97,26 @@ grid.cbar_axes[2].colorbar(im)
 plt.savefig("phi.png")
 
 
-# now do the power spectrum
-phi_hat = np.fft.fftn(phi)[0:N/2+1,0:N/2+1,0:N/2+1]
-#phi_hat = 8.0*phi_hat/N**3
-phi_hat = phi_hat/N**3
-
-phi_hat = abs(phi_hat)**2
+#---------------------------------------------------------------------------
+# now do the Fourier transform
+#---------------------------------------------------------------------------
+phi_hat = np.fft.fftn(phi)
 
 
+# Parseval's theorem: sum of |phi(x)|**2 = sum of (1/N**3) |phi_hat(k)|**2
+parseval_thm_realspace = np.sum(np.abs(phi)**2)
+parseval_thm_fourier = np.sum(np.abs(phi_hat)**2)/N**3
+
+print "sum of |phi(x)|**2         = {}".format(parseval_thm_realspace)
+print "sum of |phihat(k)|**2/N**3 = {}".format(parseval_thm_fourier)
+print " "
+print "ratio = {}".format(parseval_thm_realspace/parseval_thm_fourier)
+print "DC Offset = {}".format(phi_hat[0,0,0])
+
+
+#---------------------------------------------------------------------------
+# plot the Fourier transform
+#---------------------------------------------------------------------------
 plt.clf()
 
 F = plt.figure()
@@ -118,24 +132,31 @@ grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85),
                 cbar_pad = "0%")
 
 
-im = grid[0].imshow(phi_hat[:,:,N/4], interpolation="nearest")
+im = grid[0].imshow(np.abs(phi_hat[:,:,N/4]), interpolation="nearest")
 grid.cbar_axes[0].colorbar(im)
 
-im = grid[1].imshow(phi_hat[:,N/4,:], interpolation="nearest")
+im = grid[1].imshow(np.abs(phi_hat[:,N/4,:]), interpolation="nearest")
 grid.cbar_axes[1].colorbar(im)
 
-im = grid[2].imshow(phi_hat[N/4,:,:], interpolation="nearest")
+im = grid[2].imshow(np.abs(phi_hat[N/4,:,:]), interpolation="nearest")
 grid.cbar_axes[2].colorbar(im)
 
 plt.savefig("phihat.png")
 
 
+#---------------------------------------------------------------------------
+# normalization for power spectrum later
+#---------------------------------------------------------------------------
 
-# Parseval's theorem: sum of |phi(x)|**2 = sum of |phi_hat(k)|**2
-print "sum of |phi(x)|**2    = {}".format(np.sum(phi))
-print "sum of |phihat(k)|**2 = {}".format(np.sum(phi_hat))
-print "DC Offset = {}".format(phi_hat[0,0,0])
+# only a single octant is really unique
+phi_hat = 8.0*phi_hat[0:N/2+1,0:N/2+1,0:N/2+1]
 
+phi_hat = phi_hat/N**3
+
+
+#---------------------------------------------------------------------------
+# get the wavenumbers in physical [cm^{-1}] units
+#---------------------------------------------------------------------------
 kx = np.fft.fftfreq(N)[0:N/2+1]
 kx[-1] *= -1
 kx = kx*N/L[0]
@@ -148,6 +169,9 @@ kz = np.fft.fftfreq(N)[0:N/2+1]
 kz[-1] *= -1
 kz = kz*N/L[2]
 
+#---------------------------------------------------------------------------
+# bin up |phi_hat| in terms of |k|
+#---------------------------------------------------------------------------
 kmin = 0
 kmax = np.sqrt(np.max(kx)**2 + np.max(ky)**2 + np.max(kz)**2)
 
@@ -167,9 +191,12 @@ E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 
 for n in range(len(ncount)):
     if not ncount[n] == 0: 
-        E_spectrum[n-1] = np.sum(phi_hat.flat[whichbin==n]) #/ncount[n]
+        E_spectrum[n-1] = np.sum(np.abs(phi_hat).flat[whichbin==n]) #/ncount[n]
 
 
+#---------------------------------------------------------------------------
+# plot the power spectrum
+#---------------------------------------------------------------------------
 
 plt.clf()
 
