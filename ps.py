@@ -160,16 +160,13 @@ phi_hat = phi_hat/N**3
 #---------------------------------------------------------------------------
 # get the wavenumbers in physical [cm^{-1}] units
 #---------------------------------------------------------------------------
-kx = np.fft.fftfreq(N)[0:N/2+1]
-kx[-1] *= -1
+kx = np.fft.rfftfreq(N)
 kx = kx*N/L[0]
 
-ky = np.fft.fftfreq(N)[0:N/2+1]
-ky[-1] *= -1
+ky = np.fft.rfftfreq(N)
 ky = ky*N/L[1]
 
-kz = np.fft.fftfreq(N)[0:N/2+1]
-kz[-1] *= -1
+kz = np.fft.rfftfreq(N)
 kz = kz*N/L[2]
 
 #---------------------------------------------------------------------------
