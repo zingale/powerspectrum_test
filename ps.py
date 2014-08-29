@@ -2,7 +2,8 @@
 # illustrate that we have the scaling and normalization correct
 
 import numpy as np
-import pylab
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import AxesGrid
 
 N = 64
 
@@ -21,7 +22,7 @@ z = (np.arange(N)+0.5)*(zmax - zmin)/N + zmin
 
 x3d, y3d, z3d = np.meshgrid(x, y, z, indexing="ij")
 
-modes = 16
+modes = 8
 
 A_0 = 1000.0
 
@@ -62,7 +63,36 @@ for m in range(1,modes+1):
             k = np.sqrt(k_x**2 + k_y**2 + k_z**2)
             A = A_0*k**index/weights[ii2]
             
-            phi += A*np.sin(k_x*x3d + k_y*y3d + k_z*z3d)
+            phi += A*np.sin(2.0*np.pi*k_x*x3d + 
+                            2.0*np.pi*k_y*y3d + 
+                            2.0*np.pi*k_z*z3d)
+
+
+# plot it
+
+F = plt.figure()
+
+grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85), 
+                nrows_ncols = (1, 3),
+                axes_pad = 1.1,
+                label_mode = "all",
+                share_all = False,
+                cbar_location = "right",
+                cbar_mode = "each",
+                cbar_size = "3%",
+                cbar_pad = "0%")
+
+
+im = grid[0].imshow(phi[:,:,N/2], interpolation="nearest")
+grid.cbar_axes[0].colorbar(im)
+
+im = grid[1].imshow(phi[:,N/2,:], interpolation="nearest")
+grid.cbar_axes[1].colorbar(im)
+
+im = grid[2].imshow(phi[N/2,:,:], interpolation="nearest")
+grid.cbar_axes[2].colorbar(im)
+
+plt.savefig("phi.png")
 
 
 # now do the power spectrum
@@ -71,6 +101,35 @@ phi_hat = np.fft.fftn(phi)[0:N/2+1,0:N/2+1,0:N/2+1]
 phi_hat = phi_hat/N**3
 
 phi_hat = abs(phi_hat)**2
+
+
+plt.clf()
+
+F = plt.figure()
+
+grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85), 
+                nrows_ncols = (1, 3),
+                axes_pad = 1.1,
+                label_mode = "all",
+                share_all = False,
+                cbar_location = "right",
+                cbar_mode = "each",
+                cbar_size = "3%",
+                cbar_pad = "0%")
+
+
+im = grid[0].imshow(phi_hat[:,:,N/4], interpolation="nearest")
+grid.cbar_axes[0].colorbar(im)
+
+im = grid[1].imshow(phi_hat[:,N/4,:], interpolation="nearest")
+grid.cbar_axes[1].colorbar(im)
+
+im = grid[2].imshow(phi_hat[N/4,:,:], interpolation="nearest")
+grid.cbar_axes[2].colorbar(im)
+
+plt.savefig("phihat.png")
+
+
 
 # Parseval's theorem: sum of |phi(x)|**2 = sum of |phi_hat(k)|**2
 print "sum of |phi(x)|**2    = {}".format(np.sum(phi))
@@ -111,17 +170,20 @@ for n in range(len(ncount)):
         E_spectrum[n-1] = np.sum(phi_hat.flat[whichbin==n]) #/ncount[n]
 
 
+
+plt.clf()
+
 k = bins[1:n]
 E_spectrum = E_spectrum[0:len(k)]
 
-pylab.loglog(k, E_spectrum)
+plt.loglog(k, E_spectrum)
 
 ii = np.argmax(E_spectrum)
 kmax = k[ii]
 Emax = E_spectrum[ii]
 
-pylab.loglog(k, Emax*(k/kmax)**index, ls=":", color="0.5")
+plt.loglog(k, Emax*(k/kmax)**index, ls=":", color="0.5")
 
-pylab.savefig("ps.png")
+plt.savefig("ps.png")
 
 
