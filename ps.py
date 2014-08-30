@@ -172,12 +172,17 @@ kz = kz*N/L[2]
 #---------------------------------------------------------------------------
 # bin up |phi_hat| in terms of |k|
 #---------------------------------------------------------------------------
-kmin = 0
-kmax = np.sqrt(np.max(kx)**2 + np.max(ky)**2 + np.max(kz)**2)
 
-num = np.floor(np.sqrt(N**2 + N**2 + N**2))
+dk = kx[1]-kx[0]
 
-bins = np.linspace(kmin, kmax, num+1)
+# we don't care about a wavenumber of 0, but we want the wavenumber
+# bins centered on the physical values we care about
+kmin = kx[0]+0.5*dk
+
+num = int(np.sqrt(3)*N)
+kmax = num*dk + kmin
+
+bins = np.linspace(kmin, kmax, num+1, endpoint=True)
 
 kx3d, ky3d, kz3d = np.meshgrid(kx, ky, kz, indexing="ij")
 
@@ -204,8 +209,13 @@ for n in range(len(ncount)):
 
 plt.clf()
 
-k = bins[1:n]
-E_spectrum = E_spectrum[0:len(k)]
+k = 0.5*(bins[0:num] + bins[1:num+1])
+k = k[0:len(E_spectrum)]
+
+print k.shape
+print E_spectrum.shape
+
+print k[0]
 
 plt.loglog(k, E_spectrum)
 
