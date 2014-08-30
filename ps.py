@@ -65,7 +65,7 @@ for m in range(1,modes+1):
             ii2 = m**2 + n**2 + p**2
 
             k = np.sqrt(k_x**2 + k_y**2 + k_z**2)
-            A = A_0*k**index/weights[ii2]
+            A = np.sqrt(A_0*k**index/weights[ii2])
             
             phi += A*np.sin(2.0*np.pi*k_x*x3d + 
                             2.0*np.pi*k_y*y3d + 
@@ -190,8 +190,7 @@ ncount = np.bincount(whichbin)
 E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 
 
-# unresolved:  should I normalize by ncount[n]?  Interestingly, plotting
-# the spectrum of sum(|phi_hat(n)|)/ncount(n) gives the best slope.
+# unresolved:  should I normalize by ncount[n]?  
 
 for n in range(len(ncount)):
     if not ncount[n] == 0: 
