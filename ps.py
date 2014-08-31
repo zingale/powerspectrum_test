@@ -27,13 +27,16 @@ modes = 16
 
 A_0 = 1000.0
 
+# the minimum mode to consider -- to consider a single mode, set this
+# to modes
+mode_min = 1
 
 # first pass -- count how many hits each k gets
 weights = {}
 
-for m in range(1,modes+1):
-    for n in range(1,modes+1):
-        for p in range(1,modes+1):
+for m in range(mode_min,modes+1):
+    for n in range(mode_min,modes+1):
+        for p in range(mode_min,modes+1):
 
             ii2 = m**2 + n**2 + p**2
             
@@ -44,29 +47,33 @@ for m in range(1,modes+1):
 
 
 # amplitude of smallest k
-print "min{k_x} = ", 1/L[0]
+print "min{k_x} = ", mode_min/L[0]
 
-A_ksmall = A_0*np.sqrt(1/L[0]**2 + 1/L[1]**2 + 1/L[2]**2)**index/weights[3]
+ii_min = 3*mode_min**2 
+A_ksmall = A_0*np.sqrt((mode_min/L[0])**2 + 
+                       (mode_min/L[1])**2 + 
+                       (mode_min/L[2])**2)**index/weights[ii_min]
+
 print "amplitude of smallest k = ", np.sqrt(A_ksmall)
 print "power at smallest k =     ", A_ksmall
-
+print "weights at smallest k =   ", weights[ii_min]
 
 # compute the function we will find the power spectrum of
-for m in range(1,modes+1):
+for m in range(mode_min,modes+1):
     k_x = m/L[0]
     print "m = ", m
 
-    for n in range(1,modes+1):
+    for n in range(mode_min,modes+1):
         k_y = n/L[1]
 
-        for p in range(1,modes+1):
+        for p in range(mode_min,modes+1):
             k_z = p/L[2]
 
             ii2 = m**2 + n**2 + p**2
 
             k = np.sqrt(k_x**2 + k_y**2 + k_z**2)
             A = np.sqrt(A_0*k**index/weights[ii2])
-            
+            print "({}, {}, {})".format(m,n,p), "k = ", k, "A = ", A
             phi += A*np.sin(2.0*np.pi*k_x*x3d + 
                             2.0*np.pi*k_y*y3d + 
                             2.0*np.pi*k_z*z3d)
@@ -88,13 +95,13 @@ grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85),
                 cbar_pad = "0%")
 
 
-im = grid[0].imshow(phi[:,:,N/2], interpolation="nearest")
+im = grid[0].imshow(phi[:,:,N/2], interpolation="nearest", origin="lower")
 grid.cbar_axes[0].colorbar(im)
 
-im = grid[1].imshow(phi[:,N/2,:], interpolation="nearest")
+im = grid[1].imshow(phi[:,N/2,:], interpolation="nearest", origin="lower")
 grid.cbar_axes[1].colorbar(im)
 
-im = grid[2].imshow(phi[N/2,:,:], interpolation="nearest")
+im = grid[2].imshow(phi[N/2,:,:], interpolation="nearest", origin="lower")
 grid.cbar_axes[2].colorbar(im)
 
 plt.savefig("phi.png")
@@ -135,13 +142,22 @@ grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85),
                 cbar_pad = "0%")
 
 
-im = grid[0].imshow(np.abs(phi_hat[:,:,N/4]), interpolation="nearest")
+im = grid[0].imshow(np.abs(phi_hat[:,:,0]).T, interpolation="nearest", 
+                    origin="lower")
+grid[0].axes.xaxis.set_label_text("x")
+grid[0].axes.yaxis.set_label_text("y")
 grid.cbar_axes[0].colorbar(im)
 
-im = grid[1].imshow(np.abs(phi_hat[:,N/4,:]), interpolation="nearest")
+im = grid[1].imshow(np.abs(phi_hat[:,0,:]).T, interpolation="nearest",
+                    origin="lower")
+grid[1].axes.xaxis.set_label_text("x")
+grid[1].axes.yaxis.set_label_text("z")
 grid.cbar_axes[1].colorbar(im)
 
-im = grid[2].imshow(np.abs(phi_hat[N/4,:,:]), interpolation="nearest")
+im = grid[2].imshow(np.abs(phi_hat[0,:,:]).T, interpolation="nearest",
+                    origin="lower")
+grid[2].axes.xaxis.set_label_text("y")
+grid[2].axes.yaxis.set_label_text("z")
 grid.cbar_axes[2].colorbar(im)
 
 plt.savefig("phihat.png")
