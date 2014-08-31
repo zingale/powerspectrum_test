@@ -27,7 +27,7 @@ A_0 = 1000.0
 # amplitude of smallest k
 print "min{k_x} = ", 1/L
 
-A_ksmall = A_0*(1/L**2)**index
+A_ksmall = A_0*(1/L)**index
 print "amplitude of smallest k = ", A_ksmall
 print "power at smallest k =     ", A_ksmall**2
 
@@ -47,12 +47,12 @@ for m in range(1,modes+1):
 phi_hat = np.fft.fft(phi)
 
 
-# Parseval's theorem: sum of |phi(x)|**2 = sum of (1/N**3) |phi_hat(k)|**2
+# Parseval's theorem: sum of |phi(x)|**2 = sum of (1/N) |phi_hat(k)|**2
 parseval_thm_realspace = np.sum(np.abs(phi)**2)
-parseval_thm_fourier = np.sum(np.abs(phi_hat)**2)/N**3
+parseval_thm_fourier = np.sum(np.abs(phi_hat)**2)/N
 
-print "sum of |phi(x)|**2         = {}".format(parseval_thm_realspace)
-print "sum of |phihat(k)|**2/N**3 = {}".format(parseval_thm_fourier)
+print "sum of |phi(x)|**2      = {}".format(parseval_thm_realspace)
+print "sum of |phihat(k)|**2/N = {}".format(parseval_thm_fourier)
 print " "
 print "ratio = {}".format(parseval_thm_realspace/parseval_thm_fourier)
 print "DC Offset = {}".format(phi_hat[0])
