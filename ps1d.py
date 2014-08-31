@@ -28,8 +28,8 @@ A_0 = 1000.0
 print "min{k_x} = ", 1/L
 
 A_ksmall = A_0*(1/L)**index
-print "amplitude of smallest k = ", A_ksmall
-print "power at smallest k =     ", A_ksmall**2
+print "amplitude of smallest k = ", np.sqrt(A_ksmall)
+print "power at smallest k =     ", A_ksmall
 
 
 # compute the function we will find the power spectrum of
