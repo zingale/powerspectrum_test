@@ -8,7 +8,7 @@ from mpl_toolkits.axes_grid1 import AxesGrid
 # number of discrete points in real space to sample
 N = 64
 
-index = -2.0
+index = -4.0
 
 xmin = ymin = zmin = 0.0
 xmax = ymax = zmax = 10.0
@@ -200,7 +200,7 @@ E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 for n in range(len(ncount)):
     if not ncount[n] == 0: 
         #E_spectrum[n-1] = np.sum((np.abs(phi_hat)).flat[whichbin==n]) /ncount[n]
-        E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n]) #/ncount[n]
+        E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n]) /ncount[n]
 
 
 #---------------------------------------------------------------------------
@@ -215,7 +215,7 @@ k = k[0:len(E_spectrum)]
 print k.shape
 print E_spectrum.shape
 
-print k[0]
+print k[0], k[1], dk
 
 plt.loglog(k, E_spectrum)
 
@@ -224,6 +224,7 @@ kmax = k[ii]
 Emax = E_spectrum[ii]
 
 plt.loglog(k, Emax*(k/kmax)**index, ls=":", color="0.5")
+plt.ylim(1.e-10*Emax, 1.1*Emax)
 
 plt.savefig("ps.png")
 
