@@ -47,8 +47,8 @@ for m in range(1,modes+1):
 print "min{k_x} = ", 1/L[0]
 
 A_ksmall = A_0*np.sqrt(1/L[0]**2 + 1/L[1]**2 + 1/L[2]**2)**index/weights[3]
-print "amplitude of smallest k = ", A_ksmall
-print "power at smallest k =     ", A_ksmall**2
+print "amplitude of smallest k = ", np.sqrt(A_ksmall)
+print "power at smallest k =     ", A_ksmall
 
 
 # compute the function we will find the power spectrum of
