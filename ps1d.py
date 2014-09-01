@@ -2,8 +2,11 @@
 # illustrate that we have the scaling and normalization correct
 
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
+
+matplotlib.rcParams.update({'font.size': 18})
 
 # number of discrete points in real space to sample
 N = 64
@@ -121,8 +124,8 @@ print "maximum E = {} at k = {}".format(Emax, kmax)
 plt.loglog(kx, Emax*(kx/kmax)**index, ls=":", color="0.5")
 plt.ylim(1.e-10*Emax, 1.1*Emax)
 
-plt.xlabel("k")
-plt.ylabel("E(k)dk")
+plt.xlabel(r"$k$")
+plt.ylabel(r"$E(k)dk$")
 
 plt.tight_layout()
 plt.savefig("ps1d.png")
