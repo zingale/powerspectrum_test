@@ -193,7 +193,7 @@ dk = kx[1]-kx[0]
 
 # we don't care about a wavenumber of 0, but we want the wavenumber
 # bins centered on the physical values we care about
-kmin = kx[0]+0.5*dk
+kmin = np.sqrt(kx[1]**2 + ky[1]**2 + kz[1]**2)-0.5*dk
 
 num = int(np.sqrt(3)*N)
 kmax = num*dk + kmin
