@@ -50,13 +50,13 @@ for m in range(mode_min,modes+1):
 print "min{k_x} = ", mode_min/L[0]
 
 ii_min = 3*mode_min**2 
-A_ksmall = A_0*np.sqrt((mode_min/L[0])**2 + 
-                       (mode_min/L[1])**2 + 
-                       (mode_min/L[2])**2)**index/weights[ii_min]
+kmin = np.sqrt((mode_min/L[0])**2 + (mode_min/L[1])**2 + (mode_min/L[2])**2)
+A_ksmall = A_0*kmin**index/(weights[ii_min]*4.0*np.pi*kmin**2)
 
 print "amplitude of smallest k = ", np.sqrt(A_ksmall)
 print "power at smallest k =     ", A_ksmall
 print "weights at smallest k =   ", weights[ii_min]
+
 
 # compute the function we will find the power spectrum of
 for m in range(mode_min,modes+1):
@@ -72,11 +72,13 @@ for m in range(mode_min,modes+1):
             ii2 = m**2 + n**2 + p**2
 
             k = np.sqrt(k_x**2 + k_y**2 + k_z**2)
-            A = np.sqrt(A_0*k**index/weights[ii2])
-            print "({}, {}, {})".format(m,n,p), "k = ", k, "A = ", A
+            dA = 4.0*np.pi*k**2
+            A = np.sqrt(A_0*k**index/(weights[ii2]*dA))
+
             phi += A*np.sin(2.0*np.pi*k_x*x3d + 
                             2.0*np.pi*k_y*y3d + 
                             2.0*np.pi*k_z*z3d)
+
 
 
 #---------------------------------------------------------------------------
@@ -211,13 +213,13 @@ ncount = np.bincount(whichbin)
 E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 
 
-# unresolved:  should I normalize by ncount[n]?  
-
 for n in range(len(ncount)):
     if not ncount[n] == 0: 
         #E_spectrum[n-1] = np.sum((np.abs(phi_hat)).flat[whichbin==n]) /ncount[n]
-        E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n]) /ncount[n]
+        E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n]) #/ncount[n]
 
+
+print ncount
 
 #---------------------------------------------------------------------------
 # plot the power spectrum
@@ -226,7 +228,11 @@ for n in range(len(ncount)):
 plt.clf()
 
 k = 0.5*(bins[0:num] + bins[1:num+1])
-k = k[0:len(E_spectrum)]
+if len(E_spectrum) < len(k):
+    k = k[0:len(E_spectrum)]
+else:
+    E_spectrum = E_spectrum[0:len(k)]
+
 
 print k.shape
 print E_spectrum.shape

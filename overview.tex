@@ -7,12 +7,23 @@
 
 \usepackage{amsmath}
 
-\newcommand{\numpy}{{\sf NumPy}}
+\newcommand{\numpy}{{\sffamily NumPy}}
+
+\usepackage[defaultsans]{cantarell} %% Use option ``defaultsans'' to use cantarell as sans serif only
+\usepackage[T1]{fontenc}
+
+% this needs to be done before the fncychap style, since that will 
+% redo the chapter stuff
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+
 
 \begin{document}
 
 \begin{center}
-{\bf \Large Making Sense of Power Spectra}
+{\bfseries \sffamily \LARGE Making Sense of Power Spectra} \\
+Michael Zingale
 \end{center}
 
 We are interested in computing the numerical power spectrum of a
@@ -56,11 +67,6 @@ frequencies and dropping the negative ones (this is what the {\tt
   rfftfreq} function does for us).
 
 
-Parseval's theorem in 1-d says that
-\begin{equation}
-\sum_{n=0}^{N-1} | f(n) |^2 = \frac{1}{N} \sum_{k=0}^{N-1} | \mathcal{F}(k) |^2
-\end{equation}
-In 3-d, if we have $N^3$ points, then the normalization is $1/N^3$.
 
 
 \section*{Power}
@@ -77,17 +83,49 @@ E = \int_{-\infty}^\infty |\mathcal{F}(k)|^2 dk
 So when we compute the power spectrum, we will be looking at
 $|\mathcal{F}(k)|^2$. \\
 
-\noindent [see ``spectral density'' Wikipedia]
+\noindent [see ``spectral density'' Wikipedia] \\
 
+The discrete version of Parseval's theorem in 1-d is
+\begin{equation}
+\sum_{n=0}^{N-1} | f(n) |^2 = \frac{1}{N} \sum_{k=0}^{N-1} | \mathcal{F}(k) |^2
+\end{equation}
+In 3-d, if we have $N^3$ points, then the normalization is $1/N^3$.
 
-\section*{Test function}
+\section*{One-dimensional Example}
 
-To test the algorithm, we define a test function and see the power at
-different wavenumbers {\em in physical space}, and then do the transform
-and power spectrum to see if we get the expected result.  We will design
-our function to have a power spectrum scaling as:
+The idea of the power spectrum is very straightforward in 1-d.  To illustrate
+this we will create a function in real space that we expect to have a
+power spectrum scaling as:
 \begin{equation}
 P \sim k^{-\eta}
+\end{equation}
+This is accomplished by setting the amplitude of each mode to yield
+this power.  Our function is:
+\begin{equation}
+\phi(x) = \sum_{m=1}^{N_\mathrm{modes}} a_m \sin \left ( \frac{2\pi m x}{L}\right )
+\end{equation}
+where $L$ is the width of the physical domain, and 
+\begin{equation}
+a_m = \left (A_0 k^{-\eta} \right )^{1/2}
+\end{equation}
+
+
+5We then transform this function, denoting the transform as $\Phi(k)$.  Plotting
+$\Phi(k)$ vs.\ $k$ gives the power spectrum.  See {\tt ps1d.py}.
+
+
+
+\section*{Three-dimensional Case}
+
+In 3-d, things are more complex---we will need to bin the transformed function
+in spherical shells corresponding to our discrete $k$.
+
+Again, to test the algorithm, we define a test function and set the power at
+different wavenumbers {\em in physical space}, and then do the transform
+and power spectrum to see if we get the expected result.  We will design
+our function to have the same scaling as the 1-d case,
+\begin{equation}
+P \sim k^{-\eta} \nonumber
 \end{equation}
 Our test function
 is:
@@ -117,7 +155,7 @@ and then we can set the amplitude of component based on our desired
 powerlaw scaling.  Defining $k = |k|$, and $A_0$ as a
 reference amplitude of the power, we take
 \begin{equation}
-a_{m,n,p}^2 = \frac{A_0 k^{-\eta}}{W(k)}
+a_{m,n,p}^2 = \frac{A_0 k^{-\eta}}{W(k)} \frac{1}{4\pi k^2}
 \end{equation}
 where $W(k)$ is the weight that accounts for the fact that multiple
 combinations of $m, n, p$ can result in the same $k$.  Using Iverson bracket
