@@ -71,15 +71,16 @@ for m in range(mode_min,modes+1):
                 weights[ii2] += 1
 
 
-# amplitude of smallest k
+# power at smallest k
 print "min{k_x} = ", mode_min/L[0]
 
 ii_min = 3*mode_min**2 
 kmin = np.sqrt((mode_min/L[0])**2 + (mode_min/L[1])**2 + (mode_min/L[2])**2)
 
-A_ksmall = A_0*kmin**index/(weights[ii_min]*4.0*np.pi*kmin**2)
+# don't include the 4 pi normalization here -- we integrate this out when
+# computing the power spectrum
+A_ksmall = A_0*kmin**index/(weights[ii_min]*kmin**2)
 
-print "amplitude of smallest k = ", np.sqrt(A_ksmall)
 print "power at smallest k =     ", A_ksmall
 print "weights at smallest k =   ", weights[ii_min]
 
@@ -238,16 +239,26 @@ for n in range(len(ncount)):
         E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n])
 
 
+if len(E_spectrum) < len(kbin_center):
+    kbin_center = kbin_center[0:len(E_spectrum)]
+else:
+    E_spectrum = E_spectrum[0:len(kbin_center)]
+
+
+#---------------------------------------------------------------------------
+# Parseval's theorem on the spectrum
+#---------------------------------------------------------------------------
+
+# integrate E_spectrum k**2 dk
+energy = np.sum(E_spectrum*kbin_center**2)
+print "total energy = {}".format(energy)
+
+
 #---------------------------------------------------------------------------
 # plot the power spectrum
 #---------------------------------------------------------------------------
 
 plt.clf()
-
-if len(E_spectrum) < len(kbin_center):
-    kbin_center = kbin_center[0:len(E_spectrum)]
-else:
-    E_spectrum = E_spectrum[0:len(kbin_center)]
 
 
 plt.loglog(kbin_center, E_spectrum)

@@ -107,7 +107,7 @@ The discrete version of Parseval's theorem in 1-d is
 \begin{equation}
 \sum_{n=0}^{N-1} | f(n) |^2 = \frac{1}{N} \sum_{k=0}^{N-1} | \mathcal{F}(k) |^2
 \end{equation}
-In 3-d, if we have $N^3$ points, then the normalization is $1/N^3$.
+
 
 \section*{One-dimensional Example}
 
@@ -251,5 +251,36 @@ then we can take
 \begin{equation}
 \Delta S = 4 \pi \bar{\kappa}_\xi^2
 \end{equation}
+
+This normalization should give an amplitude in the power spectrum at the lowest
+$k$ that agrees with the corresponding amplitude in real-space for that same $k$.  
+Since the power spectrum integrated over shells, we don't include the $4\pi$
+in the real-space amplitude when comparing.
+
+As a final check on the overall normalization, we can use Parseval's thereom
+to see if we have the correct amount of energy in the spectrum.  In 3-d,
+Parseval's theorem says:
+\begin{equation}
+E = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} |f(x,y,z)|^2 dx dy dz = 
+  \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty}  |\mathcal{F}(k_x,k_y,k_z) dk_x dk_y dk_z
+\end{equation}
+or in discrete form:
+\begin{equation}
+\sum_{j=0}^{N_x} \sum_{k=0}^{N_y} \sum_{l=0}^{N_z}
+   | f(x_j, y_k, z_l) |^2 = \frac{1}{N_x N_y N_z} 
+ \sum_{k_x=0}^{N_x-1} \sum_{k_y=0}^{N_y-1} \sum_{k_z=0}^{N_z-1} 
+   | \mathcal{F}(k_x, k_y, k_z) |^2
+\end{equation}
+We can express the integral over $d^3k$ in terms of the spherical $|k|$ as
+\begin{equation}
+E = 4\pi \int_{-\infty}^{\infty} |\mathcal{F}(k)|^2 k^2 dk = \int_{-\infty}^{\infty} E(k) k^2 dk
+\end{equation}
+where we substitute in the power spectrum, $E(k)$.  This means that if we integrate up our
+power spectrum, with the $k^2$ weighting, we should get the same energy as the integral
+of $|f(x,y,z)|^2$ over physical space.  We need to keep track of the normalizations---in
+creating the power spectrum, we used $\mathcal{F}/N^3$, so our discrete sum over the energy
+spectrum will have a $N^{-6}$ normalization, while the discrete form of Parseval's theorem
+has an $N^{-3}$ normalization.
+
 
 \end{document}
