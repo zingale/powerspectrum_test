@@ -230,7 +230,11 @@ print ncount
 plt.clf()
 
 k = 0.5*(bins[0:num] + bins[1:num+1])
-k = k[0:len(E_spectrum)]
+if len(E_spectrum) < len(k):
+    k = k[0:len(E_spectrum)]
+else:
+    E_spectrum = E_spectrum[0:len(k)]
+
 
 print k.shape
 print E_spectrum.shape
