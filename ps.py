@@ -51,6 +51,7 @@ print "min{k_x} = ", mode_min/L[0]
 
 ii_min = 3*mode_min**2 
 kmin = np.sqrt((mode_min/L[0])**2 + (mode_min/L[1])**2 + (mode_min/L[2])**2)
+
 A_ksmall = A_0*kmin**index/(weights[ii_min]*4.0*np.pi*kmin**2)
 
 print "amplitude of smallest k = ", np.sqrt(A_ksmall)
@@ -72,7 +73,7 @@ for m in range(mode_min,modes+1):
             ii2 = m**2 + n**2 + p**2
 
             k = np.sqrt(k_x**2 + k_y**2 + k_z**2)
-            dA = 4.0*np.pi*k**2
+            dA = 4*np.pi*k**2
             A = np.sqrt(A_0*k**index/(weights[ii2]*dA))
 
             phi += A*np.sin(2.0*np.pi*k_x*x3d + 
@@ -219,8 +220,6 @@ for n in range(len(ncount)):
         E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n]) #/ncount[n]
 
 
-print ncount
-
 #---------------------------------------------------------------------------
 # plot the power spectrum
 #---------------------------------------------------------------------------
@@ -237,16 +236,19 @@ else:
 print k.shape
 print E_spectrum.shape
 
-print k[0], k[1], dk
-
 plt.loglog(k, E_spectrum)
 
 ii = np.argmax(E_spectrum)
 kmax = k[ii]
 Emax = E_spectrum[ii]
 
+print "maximum E = {} at k = {}".format(Emax, kmax)
+
 plt.loglog(k, Emax*(k/kmax)**index, ls=":", color="0.5")
-plt.ylim(1.e-10*Emax, 1.1*Emax)
+plt.ylim(1.e-10*Emax, 2.0*Emax)
+
+plt.xlabel("k")
+plt.ylabel("E(k)dk")
 
 plt.savefig("ps.png")
 
