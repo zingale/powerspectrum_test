@@ -7,12 +7,23 @@
 
 \usepackage{amsmath}
 
-\newcommand{\numpy}{{\sf NumPy}}
+\newcommand{\numpy}{{\sffamily NumPy}}
+
+\usepackage[defaultsans]{cantarell} %% Use option ``defaultsans'' to use cantarell as sans serif only
+\usepackage[T1]{fontenc}
+
+% this needs to be done before the fncychap style, since that will 
+% redo the chapter stuff
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+
 
 \begin{document}
 
 \begin{center}
-{\bf \Large Making Sense of Power Spectra}
+{\bfseries \sffamily \Large Making Sense of Power Spectra} \\
+Michael Zingale
 \end{center}
 
 We are interested in computing the numerical power spectrum of a
