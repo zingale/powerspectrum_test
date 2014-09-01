@@ -47,7 +47,24 @@ k_\mathrm{min} = \frac{1}{L}
 
 \section*{\numpy\ details}
 
-The {\tt rfftfreq} function returns the wavenumbers as
+The \numpy\ FFTs have the discrete form:
+\begin{equation}
+\mathcal{F}_k = \sum_{m=0}^{N-1} f_m \exp \left \{ -2\pi i \frac{mk}{N} \right \}
+\end{equation}
+and the inverse is
+\begin{equation}
+f_m = \frac{1}{N} \sum_{k=0}^{N-1} \mathcal{F}_k \exp \left \{ 2\pi i \frac{mk}{N} \right \}
+\end{equation}
+We see from the inverse that if we want to know the amplitude of a single
+mode at a given spatial location (denoted by index $m$), that $\mathcal{F}/N$
+is the normalized amplitude, i.e., we can think of this expansion as:
+\begin{equation}
+f_m = \sum_{k=0}^{N-1} \left (\frac{\mathcal{F}_k}{N} \right )
+    \exp \left \{ 2\pi i \frac{mk}{N} \right \}
+\end{equation}
+
+
+The {\tt rfftfreq()} function returns the wavenumbers as
 \begin{equation}
 k = \left \{ 0, \frac{1}{N}, \frac{2}{N}, \ldots, \frac{N-2}{2N}, \frac{1}{2} \right \}
 \end{equation}
@@ -117,8 +134,16 @@ $\Phi(k)$ vs.\ $k$ gives the power spectrum.  See {\tt ps1d.py}.
 
 \section*{Three-dimensional Case}
 
-In 3-d, things are more complex---we will need to bin the transformed function
-in spherical shells corresponding to our discrete $k$.
+In 3-d, things are more complex---we will need to bin the transformed
+function in spherical shells corresponding to our discrete $k$.  The
+power spectrum is defined as
+\begin{equation}
+E(k) = \frac{1}{\Omega} \int_{S(k)} \mathcal{F}(k) \mathcal{F}^\star(k) dS
+\end{equation}
+where $\Omega$ is the volume in physical space, and the integral is done
+over the space $S(k)$, the surface defined by $|\vec{k}| = k$.  We can
+write $dS = 4\pi k^2 dk$ and integrate along radial $|\vec{k}|$.
+
 
 Again, to test the algorithm, we define a test function and set the power at
 different wavenumbers {\em in physical space}, and then do the transform
@@ -151,7 +176,21 @@ and expressing a single component as
 \begin{equation}
 \phi_{m,n,p} = a_{m,n,p} \sin(2\pi \vec{k}\cdot \vec{x})
 \end{equation}
-and then we can set the amplitude of component based on our desired
+
+
+In discrete form, we bin the $k$ in our transformed space into a
+number of uniformly spaced bins, $\kappa_l$, where the index
+$l$ denote the bin boundaries, with $\kappa_0$ the leftmost bin boundary.
+Our power spectrum becomes
+\begin{equation}
+E(\kappa_l) = \sum_{\kappa_{l-1} \le |\vec{k}| < \kappa_l} \mathcal{F}(k) \mathcal{F}^\star(k)
+\end{equation}
+where the sum is over all the zones in the $k_x \times k_y \times k_z$ cube
+whose wavenumber magnitude, $k$, falls into our bin.  As we go to
+higher wavenumbers, the number of zones will increase as $k**2$---this
+captures the $dS$ scaling in the continuous-form of the power spectrum.
+
+We can set the amplitude of component based on our desired
 powerlaw scaling.  Defining $k = |k|$, and $A_0$ as a
 reference amplitude of the power, we take
 \begin{equation}
@@ -172,14 +211,7 @@ W(k) = \sum_{m=1}^{N_\mathrm{modes}}
        \sum_{n=1}^{N_\mathrm{modes}} 
        \sum_{p=1}^{N_\mathrm{modes}} [ k_m^2 + k_n^2 + k_p^2 = k ]
 \end{equation}
+The factor $4\pi k^2$ in the denominator reflects the $dS$ in the 
+definition of the power spectrum integral.
 
-
-\section*{Power Spectrum}
-
-The power spectrum is defined as 
-\begin{equation}
-E(k) = \frac{1}{\Omega} \int_{S(k)} \mathcal{F}(k) \mathcal{F}^\star(k) dS
-\end{equation}
-where $\Omega$ is the volume in physical space, and the integral is done
-over the space $S(k)$, the surface defined by $|\vec{k}| = k$.
 \end{document}
