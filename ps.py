@@ -213,8 +213,6 @@ ncount = np.bincount(whichbin)
 E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 
 
-# unresolved:  should I normalize by ncount[n]?  
-
 for n in range(len(ncount)):
     if not ncount[n] == 0: 
         #E_spectrum[n-1] = np.sum((np.abs(phi_hat)).flat[whichbin==n]) /ncount[n]
