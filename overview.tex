@@ -164,7 +164,7 @@ power spectrum is defined as
 E(k) = \frac{1}{\Omega} \int_{S(k)} \mathcal{F}(k) \mathcal{F}^\star(k) dS
 \end{equation}
 where $\Omega$ is the volume in physical space, and the integral is done
-over the space $S(k)$, the surface defined by $|\vec{k}| = k$.  We can
+over the surface $S(k)$, defined by $|\vec{k}| = k$.  We can
 write $dS = 4\pi k^2 dk$ and integrate along radial $|\vec{k}|$.
 
 
@@ -207,7 +207,7 @@ E(\kappa_l) = \sum_{\kappa_{l-1} \le |\vec{k}| < \kappa_l} \mathcal{F}(k) \mathc
 \end{equation}
 where the sum is over all the zones in the $k_x \times k_y \times k_z$ cube
 whose wavenumber magnitude, $k$, falls into our bin.  As we go to
-higher wavenumbers, the number of zones will increase as $k**2$---this
+higher wavenumbers, the number of zones will increase as $k^2$---this
 captures the $dS$ scaling in the continuous-form of the power spectrum.
 
 We can set the amplitude of component based on our desired
@@ -232,6 +232,8 @@ W(k) = \sum_{m=1}^{N_\mathrm{modes}}
        \sum_{p=1}^{N_\mathrm{modes}} [ k_m^2 + k_n^2 + k_p^2 = k ]
 \end{equation}
 The factor $4\pi k^2$ in the denominator reflects the $dS$ in the 
-definition of the power spectrum integral.
+definition of the power spectrum integral.  (Actually, this second
+normalization maybe should be in terms of the bins that we ultimately
+bin into, and take the form $(4/3)\pi (\kappa_l^3 - \kappa_{l-1}^3)$.
 
 \end{document}
