@@ -88,6 +88,8 @@ ii = np.argmax(E_spectrum)
 kmax = kx[ii]
 Emax = E_spectrum[ii]
 
+print "maximum E = {} at k = {}".format(Emax, kmax)
+
 plt.loglog(kx, Emax*(kx/kmax)**index, ls=":", color="0.5")
 plt.ylim(1.e-10*Emax, 1.1*Emax)
 
