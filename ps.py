@@ -159,6 +159,16 @@ print "DC Offset = {}".format(phi_hat[0,0,0])
 
 
 #---------------------------------------------------------------------------
+# normalization for power spectrum later
+#---------------------------------------------------------------------------
+
+# only a single octant is really unique
+phi_hat = 8.0*phi_hat[0:N/2+1,0:N/2+1,0:N/2+1]
+
+phi_hat = phi_hat/N**3
+
+
+#---------------------------------------------------------------------------
 # plot the Fourier transform
 #---------------------------------------------------------------------------
 plt.clf()
@@ -195,16 +205,6 @@ grid[2].axes.yaxis.set_label_text("z")
 grid.cbar_axes[2].colorbar(im)
 
 plt.savefig("phihat.png")
-
-
-#---------------------------------------------------------------------------
-# normalization for power spectrum later
-#---------------------------------------------------------------------------
-
-# only a single octant is really unique
-phi_hat = 8.0*phi_hat[0:N/2+1,0:N/2+1,0:N/2+1]
-
-phi_hat = phi_hat/N**3
 
 
 #---------------------------------------------------------------------------
