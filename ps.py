@@ -31,6 +31,31 @@ A_0 = 1000.0
 # to modes
 mode_min = 1
 
+
+# the edges of the bins in radial k we will sample the power spectrum
+# into
+
+# spacing -- this is just the first two k-modes in x
+dk = 2.0/L[0] - 1.0/L[0]
+
+# we don't care about a wavenumber of 0, but we want the wavenumber
+# bins centered on the physical values we care about
+kmin = np.sqrt((mode_min/L[0])**2 + 
+               (mode_min/L[1])**2 + 
+               (mode_min/L[2])**2)-0.5*dk
+
+num = int(np.sqrt(3)*N)
+kmax = num*dk + kmin
+
+bins = np.linspace(kmin, kmax, num+1, endpoint=True)
+
+# bin centers
+kbin_center = 0.5*(bins[0:num] + bins[1:num+1])
+
+#---------------------------------------------------------------------------
+# Create the real-space function
+#---------------------------------------------------------------------------
+
 # first pass -- count how many hits each k gets
 weights = {}
 
@@ -192,17 +217,6 @@ kz = kz*N/L[2]
 # bin up |phi_hat| in terms of |k|
 #---------------------------------------------------------------------------
 
-dk = kx[1]-kx[0]
-
-# we don't care about a wavenumber of 0, but we want the wavenumber
-# bins centered on the physical values we care about
-kmin = np.sqrt(kx[1]**2 + ky[1]**2 + kz[1]**2)-0.5*dk
-
-num = int(np.sqrt(3)*N)
-kmax = num*dk + kmin
-
-bins = np.linspace(kmin, kmax, num+1, endpoint=True)
-
 kx3d, ky3d, kz3d = np.meshgrid(kx, ky, kz, indexing="ij")
 
 k = np.sqrt(kx3d**2 + ky3d**2 + kz3d**2)
@@ -226,29 +240,27 @@ for n in range(len(ncount)):
 
 plt.clf()
 
-k = 0.5*(bins[0:num] + bins[1:num+1])
-if len(E_spectrum) < len(k):
-    k = k[0:len(E_spectrum)]
+if len(E_spectrum) < len(kbin_center):
+    kbin_center = kbin_center[0:len(E_spectrum)]
 else:
-    E_spectrum = E_spectrum[0:len(k)]
+    E_spectrum = E_spectrum[0:len(kbin_center)]
 
 
-print k.shape
-print E_spectrum.shape
-
-plt.loglog(k, E_spectrum)
+plt.loglog(kbin_center, E_spectrum)
 
 ii = np.argmax(E_spectrum)
-kmax = k[ii]
+kmax = kbin_center[ii]
 Emax = E_spectrum[ii]
 
 print "maximum E = {} at k = {}".format(Emax, kmax)
 
-plt.loglog(k, Emax*(k/kmax)**index, ls=":", color="0.5")
+plt.loglog(kbin_center, Emax*(kbin_center/kmax)**index, 
+           ls=":", color="0.5")
+
 plt.ylim(1.e-10*Emax, 2.0*Emax)
 
-plt.xlabel("k")
-plt.ylabel("E(k)dk")
+plt.xlabel(r"$k$")
+plt.ylabel(r"$E(k)dk$")
 
 plt.savefig("ps.png")
 
