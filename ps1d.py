@@ -42,6 +42,19 @@ for m in range(1,modes+1):
 
 
 #---------------------------------------------------------------------------
+# plot the real-space function
+#---------------------------------------------------------------------------
+
+plt.plot(x, phi)
+plt.xlabel(r"$x$")
+plt.ylabel(r"$f(x)$")
+
+plt.tight_layout()
+plt.savefig("phi_1d.png")
+plt.savefig("phi_1d.eps")
+
+
+#---------------------------------------------------------------------------
 # now do the Fourier transform
 #---------------------------------------------------------------------------
 phi_hat = np.fft.fft(phi)
@@ -76,6 +89,21 @@ kx = kx*N/L
 
 
 #---------------------------------------------------------------------------
+# plot the transformed function
+#---------------------------------------------------------------------------
+
+plt.clf()
+
+plt.plot(kx, np.abs(phi_hat))
+plt.xlabel(r"$k$")
+plt.ylabel(r"$|\mathcal{F}(k)|$")
+
+plt.tight_layout()
+plt.savefig("phihat_1d.png")
+plt.savefig("phihat_1d.eps")
+
+
+#---------------------------------------------------------------------------
 # plot the power spectrum
 #---------------------------------------------------------------------------
 
@@ -93,6 +121,11 @@ print "maximum E = {} at k = {}".format(Emax, kmax)
 plt.loglog(kx, Emax*(kx/kmax)**index, ls=":", color="0.5")
 plt.ylim(1.e-10*Emax, 1.1*Emax)
 
+plt.xlabel("k")
+plt.ylabel("E(k)dk")
+
+plt.tight_layout()
 plt.savefig("ps1d.png")
+plt.savefig("ps1d.eps")
 
 

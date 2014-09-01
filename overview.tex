@@ -17,6 +17,7 @@
 \usepackage{sectsty}
 \allsectionsfont{\sffamily}
 
+\usepackage{graphicx}
 
 
 \begin{document}
@@ -119,16 +120,38 @@ P \sim k^{-\eta}
 This is accomplished by setting the amplitude of each mode to yield
 this power.  Our function is:
 \begin{equation}
-\phi(x) = \sum_{m=1}^{N_\mathrm{modes}} a_m \sin \left ( \frac{2\pi m x}{L}\right )
+f(x) = \sum_{m=1}^{N_\mathrm{modes}} a_m \sin \left ( \frac{2\pi m x}{L}\right )
 \end{equation}
 where $L$ is the width of the physical domain, and 
 \begin{equation}
 a_m = \left (A_0 k^{-\eta} \right )^{1/2}
 \end{equation}
+This function is shown in Figure~\ref{fig:phi1d}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{phi_1d}
+\begin{minipage}[b]{0.45\linewidth}
+\caption{\label{fig:phi1d} The real-space, one-dimensional function $f(x)$.}
+\end{minipage}
+\end{figure}
+
+We then transform this function, denoting the transform as $\mathcal{F}(k)$.  Plotting
+$|\mathcal{F}(k)|^2$ vs.\ $k$ gives the power spectrum.  Figure~\ref{fig:ps1d} shows
+the result, together with the expected power-law scaling, $P$, shown as the 
+dashed line.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.5\linewidth]{ps1d}
+\begin{minipage}[b]{0.45\linewidth}
+\caption{\label{fig:ps1d} The power spectrum of $f(x)$.}
+\end{minipage}
+\end{figure}
 
 
-5We then transform this function, denoting the transform as $\Phi(k)$.  Plotting
-$\Phi(k)$ vs.\ $k$ gives the power spectrum.  See {\tt ps1d.py}.
+
+See {\tt ps1d.py} for the implementation of this test.
 
 
 
@@ -148,10 +171,7 @@ write $dS = 4\pi k^2 dk$ and integrate along radial $|\vec{k}|$.
 Again, to test the algorithm, we define a test function and set the power at
 different wavenumbers {\em in physical space}, and then do the transform
 and power spectrum to see if we get the expected result.  We will design
-our function to have the same scaling as the 1-d case,
-\begin{equation}
-P \sim k^{-\eta} \nonumber
-\end{equation}
+our function to have the same scaling as the 1-d case, $P \sim k^{-\eta}$.
 Our test function
 is:
 \begin{equation}
