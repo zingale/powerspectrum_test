@@ -49,7 +49,7 @@ kmax = num*dk + kmin
 
 bins = np.linspace(kmin, kmax, num+1, endpoint=True)
 
-# bin centers
+# bin centers -- kbin_center[i] is between bins[i], bins[i+1]
 kbin_center = 0.5*(bins[0:num] + bins[1:num+1])
 
 #---------------------------------------------------------------------------
@@ -98,7 +98,12 @@ for m in range(mode_min,modes+1):
             ii2 = m**2 + n**2 + p**2
 
             k = np.sqrt(k_x**2 + k_y**2 + k_z**2)
-            dA = 4*np.pi*k**2
+
+            # which bin would this k fall into?
+            xi = (np.nonzero(k > bins))[0]
+            xi = xi[len(xi)-1]
+
+            dA = 4*np.pi*kbin_center[xi]**2
             A = np.sqrt(A_0*k**index/(weights[ii2]*dA))
 
             phi += A*np.sin(2.0*np.pi*k_x*x3d + 
@@ -230,8 +235,7 @@ E_spectrum = np.zeros(len(ncount)-1, dtype=np.float64)
 
 for n in range(len(ncount)):
     if not ncount[n] == 0: 
-        #E_spectrum[n-1] = np.sum((np.abs(phi_hat)).flat[whichbin==n]) /ncount[n]
-        E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n]) #/ncount[n]
+        E_spectrum[n-1] = np.sum((np.abs(phi_hat)**2).flat[whichbin==n])
 
 
 #---------------------------------------------------------------------------

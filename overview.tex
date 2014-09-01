@@ -132,7 +132,8 @@ This function is shown in Figure~\ref{fig:phi1d}.
 \centering
 \includegraphics[width=0.5\linewidth]{phi_1d}
 \begin{minipage}[b]{0.45\linewidth}
-\caption{\label{fig:phi1d} The real-space, one-dimensional function $f(x)$.}
+\caption{\label{fig:phi1d} The real-space, one-dimensional function $f(x)$,
+for the case $N_\mathrm{modes} = 16$.}
 \end{minipage}
 \end{figure}
 
@@ -239,9 +240,16 @@ W(k) = \sum_{m=1}^{N_\mathrm{modes}}
        \sum_{p=1}^{N_\mathrm{modes}} [ k_m^2 + k_n^2 + k_p^2 = k ]
 \end{equation}
 
-The factor $4\pi k^2$ in the denominator reflects the $dS$ in the 
-definition of the power spectrum integral.  (Actually, this second
-normalization maybe should be in terms of the bins that we ultimately
-bin into, and take the form $(4/3)\pi (\kappa_l^3 - \kappa_{l-1}^3)$.
+The $\Delta S$ in the weighting reflects the fact that the power 
+in mode $k$ resides in a spherical shell---we need to divide this
+area out so when we integrate over $dS$, we get the correct power
+in the shell.  For $|k| \gg \Delta \kappa$, we can take $\Delta S \sim
+4\pi k^2$.  But we can do better by recognizing that eventually we
+will bin the data up into the bins given by $\{\kappa_l\}$.  If we
+denote the bin $\xi$ such that $\kappa_\xi \le k < \kappa_{\xi+1}$,
+then we can take
+\begin{equation}
+\Delta S = 4 \pi \bar{\kappa}_\xi^2
+\end{equation}
 
 \end{document}
