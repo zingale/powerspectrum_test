@@ -1,0 +1,10 @@
+-- draw a diagram of the k-plane with the spherical shells superposed
+
+   argue that when we bin, we need to use full shells, so the corners will
+   not be included and if our zones are not cubic, we'll leave out some
+   stuff too.
+
+-- need to find the scaling at the end that allows us to sum the E(k)
+   to get the correct energy (a la Parseval's theorem).  Something may
+   be off.
+
