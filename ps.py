@@ -44,13 +44,20 @@ kmin = np.sqrt((mode_min/L[0])**2 +
                (mode_min/L[1])**2 + 
                (mode_min/L[2])**2)-0.5*dk
 
-num = int(np.sqrt(3)*N)
-kmax = num*dk + kmin
 
-bins = np.linspace(kmin, kmax, num+1, endpoint=True)
+# kmax is 1/2dx -- we use the smallest here, because we need the spherical
+# shells to be complete
+dx = L/N
+
+kmax = np.min(0.5/dx)
+
+bins = np.arange(kmin, kmax, kmin)
+
+num = len(bins)
+print "num = ", num
 
 # bin centers -- kbin_center[i] is between bins[i], bins[i+1]
-kbin_center = 0.5*(bins[0:num] + bins[1:num+1])
+kbin_center = 0.5*(bins[0:num-1] + bins[1:num])
 
 #---------------------------------------------------------------------------
 # Create the real-space function
@@ -223,6 +230,10 @@ kz = kz*N/L[2]
 # bin up |phi_hat| in terms of |k|
 #---------------------------------------------------------------------------
 
+
+# Parseval check
+print "check: ", np.sum(np.abs(phi_hat)**2)
+
 kx3d, ky3d, kz3d = np.meshgrid(kx, ky, kz, indexing="ij")
 
 k = np.sqrt(kx3d**2 + ky3d**2 + kz3d**2)
@@ -250,7 +261,7 @@ else:
 #---------------------------------------------------------------------------
 
 # integrate E_spectrum k**2 dk
-energy = np.sum(E_spectrum*kbin_center**2)
+energy = np.sum(E_spectrum)
 print "total energy = {}".format(energy)
 
 
