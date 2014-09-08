@@ -133,19 +133,27 @@ grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85),
                 cbar_location = "right",
                 cbar_mode = "each",
                 cbar_size = "3%",
-                cbar_pad = "0%")
+                cbar_pad = "3%")
 
 
 im = grid[0].imshow(phi[:,:,N/2], interpolation="nearest", origin="lower")
+grid[0].axes.xaxis.set_label_text("x")
+grid[0].axes.yaxis.set_label_text("y")
 grid.cbar_axes[0].colorbar(im)
 
 im = grid[1].imshow(phi[:,N/2,:], interpolation="nearest", origin="lower")
+grid[1].axes.xaxis.set_label_text("x")
+grid[1].axes.yaxis.set_label_text("z")
 grid.cbar_axes[1].colorbar(im)
 
 im = grid[2].imshow(phi[N/2,:,:], interpolation="nearest", origin="lower")
+grid[2].axes.xaxis.set_label_text("y")
+grid[2].axes.yaxis.set_label_text("z")
 grid.cbar_axes[2].colorbar(im)
 
-plt.savefig("phi.png")
+F.set_size_inches(10.0, 5.0)
+
+plt.savefig("phi.eps", bbox_inches="tight")
 
 
 #---------------------------------------------------------------------------
@@ -195,20 +203,20 @@ grid = AxesGrid(F, (0.05, 0.1, 0.85, 0.85),
 
 im = grid[0].imshow(np.abs(phi_hat[:,:,0]).T, interpolation="nearest", 
                     origin="lower")
-grid[0].axes.xaxis.set_label_text("x")
-grid[0].axes.yaxis.set_label_text("y")
+grid[0].axes.xaxis.set_label_text("k_x")
+grid[0].axes.yaxis.set_label_text("k_y")
 grid.cbar_axes[0].colorbar(im)
 
 im = grid[1].imshow(np.abs(phi_hat[:,0,:]).T, interpolation="nearest",
                     origin="lower")
-grid[1].axes.xaxis.set_label_text("x")
-grid[1].axes.yaxis.set_label_text("z")
+grid[1].axes.xaxis.set_label_text("k_x")
+grid[1].axes.yaxis.set_label_text("k_z")
 grid.cbar_axes[1].colorbar(im)
 
 im = grid[2].imshow(np.abs(phi_hat[0,:,:]).T, interpolation="nearest",
                     origin="lower")
-grid[2].axes.xaxis.set_label_text("y")
-grid[2].axes.yaxis.set_label_text("z")
+grid[2].axes.xaxis.set_label_text("k_y")
+grid[2].axes.yaxis.set_label_text("k_z")
 grid.cbar_axes[2].colorbar(im)
 
 plt.savefig("phihat.png")
