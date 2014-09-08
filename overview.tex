@@ -161,7 +161,7 @@ This function is shown in Figure~\ref{fig:phi1d}.
 \includegraphics[width=0.5\linewidth]{phi_1d}
 \begin{minipage}[b]{0.45\linewidth}
 \caption{\label{fig:phi1d} The real-space, one-dimensional function $f(x)$,
-for the case $N_\mathrm{modes} = 16$, with $A_0 = 1000$ and $\eta = -4$.}
+for the case $N_\mathrm{modes} = 16$, with $A_0 = 1000$ and $\eta = -4$.\newline}
 \end{minipage}
 \end{figure}
 
@@ -174,7 +174,8 @@ dashed line.
 \centering
 \includegraphics[width=0.5\linewidth]{ps1d}
 \begin{minipage}[b]{0.45\linewidth}
-\caption{\label{fig:ps1d} The power spectrum of $f(x)$.}
+\caption{\label{fig:ps1d} The power spectrum of $f(x)$, compared to the
+expected result (dashed line).\newline}
 \end{minipage}
 \end{figure}
 
@@ -293,7 +294,18 @@ planes through the center of the domain.}
 \end{figure}
 
 Since the power spectrum integrated over shells, we don't include the $4\pi$
-in the real-space amplitude when comparing. 
+in the real space amplitude when comparing our power spectrum to the $P \sim k^{-\eta}$
+expected result.  Figure~\ref{fig:ps} shows the power spectrum of our function.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\linewidth]{ps}
+\begin{minipage}[b]{0.45\linewidth}
+\caption{\label{fig:ps} The power spectrum of our function $f(x,y,z)$ compared to
+the expected result (dashed line).\newline}
+\end{minipage}
+\end{figure}
+
 
 As a final check on the overall normalization, we can use Parseval's theorem
 to see if we have the correct amount of energy in the spectrum.  In 3-d,

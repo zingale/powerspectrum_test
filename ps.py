@@ -296,6 +296,6 @@ plt.ylim(1.e-10*Emax, 2.0*Emax)
 plt.xlabel(r"$k$")
 plt.ylabel(r"$E(k)dk$")
 
-plt.savefig("ps.png")
+plt.savefig("ps.eps", bbox_inches="tight")
 
 
