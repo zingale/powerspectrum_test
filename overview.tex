@@ -56,7 +56,7 @@ Figure~\ref{fig:wavenumbers} shows two different sine modes.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.6\linewidth]{wavenumber}
+\includegraphics[width=0.75\linewidth]{wavenumber}
 \caption{\label{fig:wavenumbers} The $k = 1/L$ (top) and $k = 4/L$ (bottom)
 modes.}
 \end{figure}
@@ -265,7 +265,7 @@ we find $W(k)$ as
 \begin{equation}
 W(k) = \sum_{m=1}^{N_\mathrm{modes}}
        \sum_{n=1}^{N_\mathrm{modes}} 
-       \sum_{p=1}^{N_\mathrm{modes}} [ k_m^2 + k_n^2 + k_p^2 = k ]
+       \sum_{p=1}^{N_\mathrm{modes}} [ k_m^2 + k_n^2 + k_p^2 = k^2 ]
 \end{equation}
 
 The $\Delta S$ in the weighting reflects the fact that the power 
@@ -283,14 +283,14 @@ then we can take
 This normalization should give an amplitude in the power spectrum at the lowest
 $k$ that agrees with the corresponding amplitude in real-space for that same $k$.  
 Since the power spectrum integrated over shells, we don't include the $4\pi$
-in the real-space amplitude when comparing.
+in the real-space amplitude when comparing. 
 
 As a final check on the overall normalization, we can use Parseval's theorem
 to see if we have the correct amount of energy in the spectrum.  In 3-d,
 Parseval's theorem says:
 \begin{equation}
 E = \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} |f(x,y,z)|^2 dx dy dz = 
-  \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty}  |\mathcal{F}(k_x,k_y,k_z) dk_x dk_y dk_z
+  \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty}  |\mathcal{F}(k_x,k_y,k_z)|^2 dk_x dk_y dk_z
 \end{equation}
 or in discrete form:
 \begin{equation}
@@ -301,10 +301,10 @@ or in discrete form:
 \end{equation}
 We can express the integral over $d^3k$ in terms of the spherical $|k|$ as
 \begin{equation}
-E = 4\pi \int_{-\infty}^{\infty} |\mathcal{F}(k)|^2 k^2 dk = \int_{-\infty}^{\infty} E(k) k^2 dk
+E = 4\pi \int_{-\infty}^{\infty} |\mathcal{F}(k)|^2 k^2 dk = \int_{-\infty}^{\infty} E(k) dk
 \end{equation}
 where we substitute in the power spectrum, $E(k)$.  This means that if we integrate up our
-power spectrum, with the $k^2$ weighting, we should get the same energy as the integral
+power spectrum, we should get the same energy as the integral
 of $|f(x,y,z)|^2$ over physical space.  We need to keep track of the normalizations---in
 creating the power spectrum, we used $\mathcal{F}/N^3$, so our discrete sum over the energy
 spectrum will have a $N^{-6}$ normalization, while the discrete form of Parseval's theorem
