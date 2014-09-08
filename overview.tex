@@ -32,8 +32,10 @@ Michael Zingale
 \end{center}
 
 We are interested in computing the numerical power spectrum of a
-function with a known analytic power spectrum, to verify our
-algorithm.
+discretely-sampled three-dimensional dataset.  These notes serve
+to verify the procedure by starting with a real-space
+function with a known analytic power spectrum and computing the
+power spectrum of this test function.
 
 Consider a function that is a superposition of sines with different
 wavelengths.  The power will be encoded in the amplitude of the sines.
@@ -48,7 +50,29 @@ The lowest wavenumber is:
 \begin{equation}
 k_\mathrm{min} = \frac{1}{L}
 \end{equation}
+Figure~\ref{fig:wavenumbers} shows two different sine modes.
 
+\suppressfloats
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.6\linewidth]{wavenumber}
+\caption{\label{fig:wavenumbers} The $k = 1/L$ (top) and $k = 4/L$ (bottom)
+modes.}
+\end{figure}
+
+
+The definition of the Fourier transform is:
+\begin{equation}
+\mathcal{F}(k) = \int_{-\infty}^{\infty} f(x) e^{-2\pi i x k} dx
+\end{equation}
+with the inverse transform as
+\begin{equation}
+f(x) = \int_{-\infty}^{\infty} \mathcal{F}(x) e^{2\pi i x k} dk
+\end{equation}
+However, we need to work with discretely-sampled data, so we will need
+the {\em discrete Fourier transform}, which is efficiently implemented by
+the FFT algorithm.
 
 \section*{\numpy\ details}
 
